@@ -1,0 +1,9 @@
+node_modules
+.git
+.github
+infra
+k8s
+*.md
+.env
+.env.*
+Dockerfile
