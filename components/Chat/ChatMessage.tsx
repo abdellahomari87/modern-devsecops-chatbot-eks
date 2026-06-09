@@ -3,7 +3,6 @@ import { IconCheck, IconCopy, IconEdit, IconUser, IconRobot } from '@tabler/icon
 import { useTranslation } from 'next-i18next';
 import { FC, memo, useEffect, useRef, useState } from 'react';
 import rehypeKatex from 'rehype-katex';
-import 'katex/dist/katex.min.css';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import { CodeBlock } from '../Markdown/CodeBlock';
