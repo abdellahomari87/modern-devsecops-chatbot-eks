@@ -52,7 +52,6 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: 1
           ignore-unfixed: true
-          skip-dirs: /usr/local/lib/node_modules/npm,/app/node_modules
 
       - name: Build Docker image
         run: docker build -t $IMAGE_URI .
@@ -64,6 +63,7 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: 1
           ignore-unfixed: true
+          skip-dirs: /usr/local/lib/node_modules/npm
 
       - name: Push image to Amazon ECR
         if: github.event_name == 'push'
