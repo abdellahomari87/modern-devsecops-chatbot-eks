@@ -79,5 +79,6 @@ jobs:
       - name: Deploy to EKS
         if: github.event_name == 'push'
         run: |
-          kubectl set image deployment/chatbot-ui chatbot=$IMAGE_URI -n chatbot || true
-          kubectl rollout status deployment/chatbot-ui -n chatbot || true
+          sed "s|IMAGE_PLACEHOLDER|$IMAGE_URI|g" k8s/all.yaml > k8s/rendered.yaml
+          kubectl apply -f k8s/rendered.yaml
+          kubectl rollout status deployment/chatbot-ui -n chatbot
