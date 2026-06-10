@@ -80,7 +80,6 @@ jobs:
         if: github.event_name == 'push'
         run: |
           kubectl apply -f k8s/policies/security-policies.yaml
-          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=kyverno -n kyverno --timeout=120s
 
       - name: Deploy to EKS
         if: github.event_name == 'push'
