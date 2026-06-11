@@ -17,6 +17,9 @@ spec:
       verifyImages:
         - imageReferences:
             - "600897147573.dkr.ecr.us-east-1.amazonaws.com/modern-devsecops-chatbot:*"
+          imageRegistryCredentials:
+            secrets:
+              - ecr-registry-secret
           mutateDigest: true
           required: true
           verifyDigest: true
