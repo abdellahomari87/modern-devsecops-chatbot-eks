@@ -70,6 +70,7 @@ jobs:
         run: docker push $IMAGE_URI
 
       - name: Install Cosign
+        if: github.event_name == 'push'
         uses: sigstore/cosign-installer@v3
 
       - name: Generate SBOM
@@ -101,36 +102,31 @@ jobs:
             --region $AWS_REGION \
             --name $EKS_CLUSTER_NAME
 
-      - name: Apply Kyverno policies
-        if: github.event_name == 'push'
-        run: |
-          kubectl apply -f k8s/policies/security-policies.yaml
-          kubectl apply -f k8s/policies/verify-image-signatures.yaml
-
-        - name: Refresh ECR secret for Kyverno image verification
-        run: |
-          kubectl create namespace chatbot --dry-run=client -o yaml | kubectl apply -f -
-
-          kubectl create secret docker-registry ecr-registry-secret \
-            --namespace chatbot \
-            --docker-server=600897147573.dkr.ecr.us-east-1.amazonaws.com \
-            --docker-username=AWS \
-            --docker-password="$(aws ecr get-login-password --region us-east-1)" \
-            --dry-run=client -o yaml | kubectl apply -f -
-
-          kubectl create secret docker-registry ecr-registry-secret \
-            --namespace kyverno \
-            --docker-server=600897147573.dkr.ecr.us-east-1.amazonaws.com \
-            --docker-username=AWS \
-            --docker-password="$(aws ecr get-login-password --region us-east-1)" \
-            --dry-run=client -o yaml | kubectl apply -f -
-
       - name: Wait for Kyverno to be ready
+        if: github.event_name == 'push'
         run: |
           kubectl -n kyverno rollout status deployment/kyverno-admission-controller --timeout=180s
           kubectl -n kyverno rollout status deployment/kyverno-background-controller --timeout=180s
           kubectl -n kyverno rollout status deployment/kyverno-cleanup-controller --timeout=180s
           kubectl -n kyverno rollout status deployment/kyverno-reports-controller --timeout=180s
+
+      - name: Refresh ECR secret for Kyverno image verification
+        if: github.event_name == 'push'
+        run: |
+          ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+
+          kubectl create secret docker-registry ecr-registry-secret \
+            --namespace kyverno \
+            --docker-server=$ACCOUNT_ID.dkr.ecr.${AWS_REGION}.amazonaws.com \
+            --docker-username=AWS \
+            --docker-password="$(aws ecr get-login-password --region $AWS_REGION)" \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Apply Kyverno policies
+        if: github.event_name == 'push'
+        run: |
+          kubectl apply -f k8s/policies/security-policies.yaml
+          kubectl apply -f k8s/policies/verify-image-signatures.yaml
 
       - name: Deploy to EKS
         if: github.event_name == 'push'
