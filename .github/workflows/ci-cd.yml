@@ -56,6 +56,19 @@ jobs:
       - name: Build Docker image
         run: docker build -t $IMAGE_URI .
 
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.IMAGE_URI }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.spdx.json
+
       - name: Trivy image scan
         uses: aquasecurity/trivy-action@master
         with:
