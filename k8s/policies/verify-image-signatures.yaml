@@ -1,0 +1,30 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: verify-image-signatures
+spec:
+  validationFailureAction: Enforce
+  background: false
+  rules:
+    - name: verify-chatbot-image-signature
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+              namespaces:
+                - chatbot
+      verifyImages:
+        - imageReferences:
+            - "600897147573.dkr.ecr.us-east-1.amazonaws.com/modern-devsecops-chatbot:*"
+          mutateDigest: true
+          required: true
+          verifyDigest: true
+          attestors:
+            - count: 1
+              entries:
+                - keyless:
+                    issuer: "https://token.actions.githubusercontent.com"
+                    subject: "https://github.com/abdellahomari87/modern-devsecops-chatbot-eks/.github/workflows/ci-cd.yml@refs/heads/main"
+                    rekor:
+                      url: "https://rekor.sigstore.dev"

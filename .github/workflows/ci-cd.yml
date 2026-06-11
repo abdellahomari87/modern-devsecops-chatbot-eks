@@ -98,10 +98,11 @@ jobs:
             --region $AWS_REGION \
             --name $EKS_CLUSTER_NAME
 
-      - name: Apply Kyverno security policies
+      - name: Apply Kyverno policies
         if: github.event_name == 'push'
         run: |
           kubectl apply -f k8s/policies/security-policies.yaml
+          kubectl apply -f k8s/policies/verify-image-signatures.yaml
 
       - name: Deploy to EKS
         if: github.event_name == 'push'
