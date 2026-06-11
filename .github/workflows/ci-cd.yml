@@ -104,6 +104,13 @@ jobs:
           kubectl apply -f k8s/policies/security-policies.yaml
           kubectl apply -f k8s/policies/verify-image-signatures.yaml
 
+      - name: Wait for Kyverno to be ready
+        run: |
+          kubectl -n kyverno rollout status deployment/kyverno-admission-controller --timeout=180s
+          kubectl -n kyverno rollout status deployment/kyverno-background-controller --timeout=180s
+          kubectl -n kyverno rollout status deployment/kyverno-cleanup-controller --timeout=180s
+          kubectl -n kyverno rollout status deployment/kyverno-reports-controller --timeout=180s
+
       - name: Deploy to EKS
         if: github.event_name == 'push'
         run: |
