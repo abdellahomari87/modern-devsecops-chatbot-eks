@@ -12,6 +12,13 @@ spec:
           - resources:
               kinds:
                 - Pod
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - kube-system
+                - kyverno 
+
       validate:
         message: "Containers must run as non-root."
         pattern:
@@ -34,6 +41,12 @@ spec:
           - resources:
               kinds:
                 - Pod
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - kube-system
+                - kyverno
       validate:
         message: "Using the latest image tag is not allowed."
         foreach:
@@ -59,6 +72,12 @@ spec:
           - resources:
               kinds:
                 - Pod
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - kube-system
+                - kyverno
       validate:
         message: "CPU and memory requests/limits are required."
         pattern:
