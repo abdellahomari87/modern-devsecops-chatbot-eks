@@ -1,126 +1,287 @@
-# Chatbot UI
+# 🚀 Plateforme DevSecOps Moderne pour Chatbot IA sur AWS EKS
 
-Chatbot UI is an advanced chatbot kit for OpenAI's chat models built on top of [Chatbot UI Lite](https://github.com/mckaywrigley/chatbot-ui-lite) using Next.js, TypeScript, and Tailwind CSS.
+## 📌 Présentation du projet
 
-See a [demo](https://twitter.com/mckaywrigley/status/1640380021423603713?s=46&t=AowqkodyK6B4JccSOxSPew).
+Ce projet démontre la mise en œuvre d'une plateforme **Cloud Native DevSecOps** moderne permettant le déploiement sécurisé d'une application de chatbot IA sur Amazon EKS.
 
-![Chatbot UI](./public/screenshot.png)
+L'objectif est de sécuriser l'ensemble de la chaîne logicielle, depuis le commit Git jusqu'au déploiement Kubernetes.
 
-## Updates
+---
 
-Chatbot UI will be updated over time.
+## 🏗 Architecture
 
-Expect frequent improvements.
-
-**Next up:**
-
-- [ ] Delete messages
-- [ ] More model settings
-- [ ] Plugins
-
-**Recent updates:**
-
-- [x] Prompt templates (3/27/23)
-- [x] Regenerate & edit responses (3/25/23)
-- [x] Folders (3/24/23)
-- [x] Search chat content (3/23/23)
-- [x] Stop message generation (3/22/23)
-- [x] Import/Export chats (3/22/23)
-- [x] Custom system prompt (3/21/23)
-- [x] Error handling (3/20/23)
-- [x] GPT-4 support (access required) (3/20/23)
-- [x] Search conversations (3/19/23)
-- [x] Code syntax highlighting (3/18/23)
-- [x] Toggle sidebar (3/18/23)
-- [x] Conversation naming (3/18/23)
-- [x] Github flavored markdown (3/18/23)
-- [x] Add OpenAI API key in app (3/18/23)
-- [x] Markdown support (3/17/23)
-
-## Modifications
-
-Modify the chat interface in `components/Chat`.
-
-Modify the sidebar interface in `components/Sidebar`.
-
-Modify the system prompt in `utils/index.ts`.
-
-## Deploy
-
-**Vercel**
-
-Host your own live version of Chatbot UI with Vercel.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmckaywrigley%2Fchatbot-ui)
-
-**Replit**
-
-Fork Chatbot UI on Replit [here](https://replit.com/@MckayWrigley/chatbot-ui-pro?v=1).
-
-**Docker**
-
-Build locally:
-
-```shell
-docker build -t chatgpt-ui .
-docker run -e OPENAI_API_KEY=xxxxxxxx -p 3000:3000 chatgpt-ui
+```text
+Développeur
+    ↓
+Git Push
+    ↓
+GitHub Actions CI/CD
+    ↓
+Scans de sécurité
+    ↓
+Build Docker
+    ↓
+Génération SBOM
+    ↓
+Signature Cosign
+    ↓
+Amazon ECR
+    ↓
+Vérification Kyverno
+    ↓
+Amazon EKS
+    ↓
+AWS Application Load Balancer
+    ↓
+Utilisateurs
 ```
 
-Pull from ghcr:
+---
 
+## ☁ Services AWS utilisés
+
+* Amazon EKS
+* Amazon ECR
+* AWS Application Load Balancer
+* IAM Roles for Service Accounts (IRSA)
+* GitHub OIDC Federation
+
+---
+
+## 🛠 Infrastructure as Code
+
+* Terraform
+
+Infrastructure déployée :
+
+* VPC
+* Sous-réseaux publics et privés
+* Internet Gateway
+* NAT Gateway
+* Tables de routage
+* Cluster EKS
+* Managed Node Groups
+* Dépôt ECR
+* IAM Roles
+* OIDC Provider
+
+---
+
+## 🔄 Pipeline CI/CD
+
+Pipeline entièrement automatisé avec GitHub Actions.
+
+### Étapes du pipeline
+
+```text
+Git Push
+   ↓
+Checkout du code
+   ↓
+Installation des dépendances
+   ↓
+Tests
+   ↓
+Scan Trivy du code
+   ↓
+Build Docker
+   ↓
+Scan Trivy de l'image
+   ↓
+Génération SBOM
+   ↓
+Push vers Amazon ECR
+   ↓
+Signature Cosign
+   ↓
+Déploiement des policies Kyverno
+   ↓
+Déploiement sur EKS
 ```
-docker run -e OPENAI_API_KEY=xxxxxxxx -p 3000:3000 ghcr.io/mckaywrigley/chatbot-ui:main
+
+---
+
+## 🐳 Conteneurisation
+
+* Docker Multi-stage Build
+* Tags immuables
+* Scan automatique des vulnérabilités ECR
+
+---
+
+## ☸ Composants Kubernetes
+
+* Namespace
+* Deployment
+* Service
+* Ingress
+* Horizontal Pod Autoscaler (HPA)
+* NetworkPolicy
+* PodDisruptionBudget
+
+---
+
+## 🔐 Sécurité Kubernetes
+
+### Pod Security Standards
+
+Mode :
+
+```text
+restricted
 ```
 
-## Running Locally
+### Security Context
 
-**1. Clone Repo**
+Implémentation :
+
+* runAsNonRoot
+* seccompProfile RuntimeDefault
+* allowPrivilegeEscalation=false
+* capabilities.drop=ALL
+
+### Gestion des ressources
+
+* CPU Requests
+* Memory Requests
+* CPU Limits
+* Memory Limits
+
+### Vérification de santé
+
+* Readiness Probe
+* Liveness Probe
+
+---
+
+## 🛡 Contrôles DevSecOps
+
+### Trivy
+
+* Scan du filesystem
+* Scan des images Docker
+
+### Kyverno
+
+Policies implémentées :
+
+* Containers non-root obligatoires
+* Resource Limits obligatoires
+* Interdiction du tag latest
+* Vérification des signatures d'images
+
+### Network Policies
+
+Restriction du trafic réseau entrant et sortant.
+
+### HPA
+
+Autoscaling basé sur l'utilisation CPU.
+
+---
+
+## 🔏 Sécurité de la Supply Chain
+
+### SBOM
+
+Génération automatique du Software Bill of Materials.
+
+### Cosign
+
+Signature automatique des images Docker.
+
+### GitHub OIDC
+
+Authentification sans clés AWS statiques.
+
+### VerifyImages
+
+Kyverno vérifie la signature des images avant déploiement.
+
+Seules les images signées sont autorisées sur le cluster.
+
+---
+
+## ✅ Validation de sécurité
+
+### Test d'image non signée
 
 ```bash
-git clone https://github.com/mckaywrigley/chatbot-ui.git
+kubectl apply -f unsigned-ecr-pod.yaml
 ```
 
-**2. Install Dependencies**
+Résultat attendu :
+
+```text
+Error from server (Forbidden)
+```
+
+### Test d'un pod malveillant
 
 ```bash
-npm i
+kubectl run bad-pod --image=nginx:latest -n chatbot
 ```
 
-**3. Provide OpenAI API Key**
+Résultat :
 
-Create a .env.local file in the root of the repo with your OpenAI API Key:
-
-```bash
-OPENAI_API_KEY=YOUR_KEY
+```text
+Bloqué par Pod Security Standards et Kyverno
 ```
 
-> You can set `OPENAI_API_HOST` where access to the official OpenAI host is restricted or unavailable, allowing users to configure an alternative host for their specific needs.
+---
 
-> Additionally, if you have multiple OpenAI Organizations, you can set `OPENAI_ORGANIZATION` to specify one.
+## 📊 Fonctionnalités implémentées
 
-**4. Run App**
+✅ Terraform
 
-```bash
-npm run dev
-```
+✅ Amazon EKS
 
-**5. Use It**
+✅ Amazon ECR
 
-You should be able to start chatting.
+✅ GitHub Actions
 
-## Configuration
+✅ Docker
 
-When deploying the application, the following environment variables can be set:
+✅ Trivy
 
-| Environment Variable  | Default value                  | Description                                             |
-| --------------------- | ------------------------------ | ------------------------------------------------------- |
-| OPENAI_API_KEY        |                                | The default API key used for authentication with OpenAI |
-| DEFAULT_MODEL         | `gpt-3.5-turbo`                | The default model to use on new conversations           |
-| DEFAULT_SYSTEM_PROMPT | [see here](utils/app/const.ts) | The defaut system prompt to use on new conversations    |
+✅ SBOM
 
-If you do not provide an OpenAI API key with `OPENAI_API_KEY`, users will have to provide their own key.
-If you don't have an OpenAI API key, you can get one [here](https://platform.openai.com/account/api-keys).
+✅ Cosign
 
-## Contact
+✅ GitHub OIDC
 
-If you have any questions, feel free to reach out to me on [Twitter](https://twitter.com/mckaywrigley).
+✅ Kyverno
+
+✅ VerifyImages
+
+✅ Network Policies
+
+✅ HPA
+
+✅ Pod Security Standards
+
+✅ AWS Load Balancer Controller
+
+✅ Application Load Balancer
+
+---
+
+## 🚀 Améliorations futures
+
+* Prometheus
+* Grafana
+* Alertmanager
+* Falco
+* Trivy Operator
+* External Secrets Operator
+* AWS Secrets Manager
+* ArgoCD GitOps
+
+---
+
+## 👨‍💻 Auteur
+
+Abdellah Omari
+
+Cloud DevSecOps Engineer | AWS | Kubernetes | Terraform | Security
+

@@ -308,6 +308,9 @@ resource "aws_iam_role_policy" "github_actions_policy" {
           "ecr:InitiateLayerUpload",
           "ecr:PutImage",
           "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:DescribeImages",
+          "ecr:DescribeRepositories",
           "eks:DescribeCluster",
           "eks:ListClusters",
           "sts:GetCallerIdentity"
